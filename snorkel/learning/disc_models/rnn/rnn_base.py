@@ -32,23 +32,36 @@ class RNNBase(TFNoiseAwareModel):
                 w = "Candidate {0} has argument past max length for model:"
                 info = "[arg ends at index {0}; max len {1}]".format(end, mx)
                 warnings.warn('\t'.join([w.format(i), info]))
-
     def _make_tensor(self, x):
         """Construct input tensor with padding
             Builds a matrix of symbols corresponding to @self.word_dict for the
             current batch and an array of true sentence lengths
         """
-        batch_size = len(x)
+        try :
+            batch_size = len(x)
+        except:
+            batch_size = x.shape[0]
         x_batch    = np.zeros((batch_size, self.max_len), dtype=np.int32)
         len_batch  = np.zeros(batch_size, dtype=np.int32)
         for j, token_ids in enumerate(x):
-            t               = min(len(token_ids), self.max_len)
-            x_batch[j, 0:t] = token_ids[0:t]
+            try :
+                minlen = min(len(token_ids), self.max_len)
+                tokidreshape = token_ids
+            except:
+                if token_ids.shape[0]==1:
+                    minlen = min(token_ids.shape[1], self.max_len)
+                    tokidreshape = token_ids.todense().reshape((token_ids.shape[1],))
+                else:
+                    minlen = min(token_ids.shape[0], self.max_len)
+                    tokidreshape = token_ids.todense().reshape((token_ids.shape[0],))
+
+            t               = minlen
+            x_batch[j, 0:t] = tokidreshape[0:t]
             len_batch[j]    = t
         return x_batch, len_batch
 
     def _build_model(self, dim=50, attn_window=None, max_len=20,
-        cell_type=tf.contrib.rnn.BasicLSTMCell, word_dict=SymbolTable(), 
+        cell_type=tf.nn.rnn_cell.BasicLSTMCell, word_dict=SymbolTable(), 
         **kwargs):
         """
         Build RNN model
@@ -75,7 +88,7 @@ class RNNBase(TFNoiseAwareModel):
         # Embedding layer
         emb_var = tf.Variable(
             tf.random_normal((vocab_size - 1, dim), stddev=SD, seed=s1))
-        embedding = tf.concat([tf.zeros([1, dim]), emb_var], axis=0)
+        embedding = tf.concat(0,[tf.zeros([1, dim]), emb_var])
         inputs = tf.nn.embedding_lookup(embedding, self.sentences)
         
         # Build RNN graph

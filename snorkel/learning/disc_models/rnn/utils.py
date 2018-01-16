@@ -46,7 +46,7 @@ def get_rnn_output(output, dim, lengths):
 
 
 def get_bi_rnn_output(output, dim, lengths):
-    c_output   = tf.concat(output, 2)
+    c_output   = tf.concat(2,output)
     batch_size = tf.shape(c_output)[0]
     max_length = tf.shape(c_output)[1]
     index      = tf.range(0, batch_size) * max_length + (lengths - 1)
