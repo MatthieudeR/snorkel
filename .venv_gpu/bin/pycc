@@ -1,3 +1,0 @@
-#!/home/mderoche/Snorkel/snorkel/.venv_gpu/bin/python
-from numba.pycc import main
-main()
