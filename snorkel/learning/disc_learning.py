@@ -58,7 +58,7 @@ class TFNoiseAwareModel(Classifier):
             loss_fn = tf.nn.softmax_cross_entropy_with_logits
         else:
             loss_fn = tf.nn.sigmoid_cross_entropy_with_logits
-        self.loss = tf.reduce_mean(loss_fn(logits=self.logits, labels=self.Y))
+        self.loss = tf.reduce_mean(loss_fn(logits=self.logits, targets=self.Y))
         
         # Build training op
         self.lr = tf.placeholder(tf.float32)
