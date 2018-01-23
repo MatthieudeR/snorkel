@@ -48,7 +48,7 @@ class RNNBase(TFNoiseAwareModel):
         return x_batch, len_batch
 
     def _build_model(self, dim=50, attn_window=None, max_len=20,
-        cell_type=tf.contrib.rnn.BasicLSTMCell, word_dict=SymbolTable(), 
+        cell_type=tf.nn.rnn_cell.BasicLSTMCell, word_dict=SymbolTable(), 
         **kwargs):
         """
         Build RNN model
@@ -75,7 +75,7 @@ class RNNBase(TFNoiseAwareModel):
         # Embedding layer
         emb_var = tf.Variable(
             tf.random_normal((vocab_size - 1, dim), stddev=SD, seed=s1))
-        embedding = tf.concat([tf.zeros([1, dim]), emb_var], axis=0)
+        embedding = tf.concat(0,[tf.zeros([1, dim]), emb_var])
         inputs = tf.nn.embedding_lookup(embedding, self.sentences)
         
         # Build RNN graph
