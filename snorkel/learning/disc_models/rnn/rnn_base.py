@@ -54,6 +54,7 @@ class RNNBase(TFNoiseAwareModel):
                 minlen = min(len(token_ids), self.max_len)
                 tokidreshape = token_ids
             except:
+                print("Exception caught in making tensor")
                 if token_ids.shape[0]==1:
                     minlen = min(token_ids.shape[1], self.max_len)
                     tokidreshape = token_ids.todense().reshape((token_ids.shape[1],))
@@ -67,7 +68,7 @@ class RNNBase(TFNoiseAwareModel):
         return x_batch, len_batch
 
     def _build_model(self, dim=50, attn_window=None, max_len=20,
-        cell_type=tf.nn.rnn_cell.BasicLSTMCell, word_dict=SymbolTable(), 
+        cell_type=tf.nn.rnn_cell.BasicLSTMCell, word_dict=SymbolTable(),
         **kwargs):
         """
         Build RNN model
