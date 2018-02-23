@@ -96,7 +96,7 @@ class CorpusParserFilter(UDFRunnerBatches):
         self.parser = parser or StanfordCoreNLPServer()
         super(CorpusParserFilter, self).__init__(CorpusParserUDF,
                                            parser=self.parser,
-                                           fn=fn)
+                                           fn=fn,udf_batch_size = udf_batch_size)
         self.udf_batch_size=udf_batch_size
         self.batch_filter = batch_filter
 
