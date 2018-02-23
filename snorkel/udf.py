@@ -173,8 +173,8 @@ class UDFRunnerBatches(UDFRunner):
                     set_yl = self.batch_filter.filter_batch(set_y)
                 else:
                     set_yl = set_y
-                udf.session.add(set_xs[i][0])
-                #print("Selected  {} out of {}".format(len(set_yl),len(set_y)))
+                #udf.session.add(set_xs[i][0])
+                print("Selected  {} out of {}".format(len(set_yl),len(set_y)))
                 for sel_k in set_yl.keys():
                     set_yi  = set_yl[sel_k]
                     for y in set_yi:
