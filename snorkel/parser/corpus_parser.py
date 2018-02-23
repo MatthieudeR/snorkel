@@ -49,6 +49,7 @@ class BatchFilter(object):
         for k in batch_dico.keys():
             if self.filter_item(batch_dico[k]):
                 new_batch_dico[k] = batch_dico[k]
+                #print("Selecting doc {}".format(list(batch_dico[k])[0].document.name))
         return new_batch_dico
 
     def filter_item(self,batch_item):
@@ -72,7 +73,7 @@ class CEFilter(BatchFilter):
         items = list()
         for item in batch_item:
             items.extend(list(udf.apply(item,clear = True,split = 0,return_type = "dummy")))
-        #print(len(items))
+        #print("Doc {} has {} cands".format(list(batch_item)[0].document.name, len(items)))
         return len(items) > 0
 
     def clean_batch(self):
@@ -96,7 +97,7 @@ class CorpusParserFilter(UDFRunnerBatches):
         self.parser = parser or StanfordCoreNLPServer()
         super(CorpusParserFilter, self).__init__(CorpusParserUDF,
                                            parser=self.parser,
-                                           fn=fn)
+                                           fn=fn,udf_batch_size=udf_batch_size)
         self.udf_batch_size=udf_batch_size
         self.batch_filter = batch_filter
 
