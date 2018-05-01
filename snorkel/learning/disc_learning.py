@@ -86,7 +86,9 @@ class TFNoiseAwareModel(Classifier):
         self._build_loss(**training_kwargs)
         # Build training op
         self.lr = tf.placeholder(tf.float32)
-        self.optimizer = tf.train.AdamOptimizer(self.lr).minimize(self.loss)
+        self.optimizer = tf.train.MomentumOptimizer(self.lr,0.9,use_nesterov=True).minimize(self.loss)
+        #self.optimizer = tf.train.AdamOptimizer(self.lr).minimize(self.loss)
+        print("Using {}".format(self.optimizer.__class__))
 
     def _construct_feed_dict(self, X_b, Y_b, lr=0.01, **kwargs):
         """
@@ -280,7 +282,7 @@ class TFNoiseAwareModel(Classifier):
                     t > dev_ckpt_delay * n_epochs and score > dev_score_opt:
                     dev_score_opt = score
                     self.save(save_dir=save_dir, global_step=t)
-            if allchecks:
+            if allchecks and t%5==0:
                 self.save(save_dir=save_dir, global_step=t, model_name=self.name + "_fullchk{}_epoch_{}".format(kwargs.get("prefix","_def_"),t))
 
         # Conclude training

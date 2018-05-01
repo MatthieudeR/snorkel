@@ -71,12 +71,12 @@ def corenlp_to_xmltree(s, prune_root=True):
       raise ValueError("Cannot convert input object to dict")
 
   # Use the dep_parents array as a guide: ensure it is present and a list of ints
-  if not('dep_parents' in s and type(s['dep_parents']) == list):
-    raise ValueError("Input CoreNLP object must have a 'dep_parents' attribute which is a list")
+  if not('dep_parents' in s and hasattr(s['dep_parents'] ,"__len__")):
+    raise ValueError("Input CoreNLP object must have a 'dep_parents' attribute")
   try:
-    dep_parents = map(int, s['dep_parents'])
+    dep_parents = list(map(int, list(s['dep_parents'])))
   except:
-    raise ValueError("'dep_parents' attribute must be a list of ints")
+    raise ValueError("'dep_parents' attribute must be castable to a list of ints")
 
   # Also ensure that we are using CoreNLP-native indexing (root=0, 1-base word indexes)!
   b = min(dep_parents)

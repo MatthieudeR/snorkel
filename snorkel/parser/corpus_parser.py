@@ -98,6 +98,7 @@ class CorpusParserFilter(UDFRunnerBatches):
                                            parser=self.parser,
                                            fn=fn)
         self.udf_batch_size=udf_batch_size
+        print("Using batches of size {}".format(self.udf_batch_size))
         self.batch_filter = batch_filter
 
     def clear(self, session, **kwargs):
